@@ -28,7 +28,8 @@ private:
     GLuint m_color_location;
     GLuint m_tex_coord_location;
     GLuint m_normal_location;
-    
+    GLuint m_sampler_location;
+
 public:
     ShaderProgram(Shader *shader1, ...);
     GLuint GetID() const;
@@ -39,6 +40,7 @@ public:
     GLuint GetTexCoordLocation() const;
     GLuint GetColorLocation() const;
     GLuint GetNormalLocation() const;
+    GLuint GetSamplerLocation() const;
 };
 
 };

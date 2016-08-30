@@ -3,26 +3,23 @@
 #include <GL/freeglut.h>
 #include <GL/glu.h>
 #include <glm/glm.hpp>
-
+#include <glm/gtc/matrix_transform.hpp>
 #include "d3v/mouse_projection.hpp"
+
 using namespace glm;
 
-int d3v::MouseProjection(vec3 &pos, int x, int y)
+void d3v::MouseProjection(vec3 &pos, int x, int y,
+                          mat4 const &view, mat4 const &proj)
 {
-//     GLdouble ox = 0.0, oy = 0.0, oz = 0.0;
-//     GLint viewport[4];
-//     GLdouble projection[16];
-//     GLfloat wx = x, wy, wz;
-//     glGetIntegerv(GL_VIEWPORT, viewport);
-//     wy = y =  viewport[3] - y;
-    
-// //  glGetDoublev(GL_MODELVIEW_MATRIX, modelview);
-//     glGetDoublev(GL_PROJECTION_MATRIX, projection);
-//     glReadPixels(x, y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &wz);
-//     gluUnProject(wx, wy, wz,
-// 		 modelview, projection, viewport,
-// 		 &ox, &oy, &oz);
-    
-//     pos = vec3(ox, oy, oz);
-    return 1;
+    GLdouble ox = 0.0, oy = 0.0, oz = 0.0;
+    GLint viewport[4];
+    vec3 window;
+
+    glGetIntegerv(GL_VIEWPORT, viewport);
+    ivec4 vp = { viewport[0], viewport[1], viewport[2], viewport[3] };
+
+    window.x = x;
+    window.y = y = viewport[3] - y;
+    glReadPixels(x, y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &window.z);
+    pos = glm::unProject(window, view, proj, vp);
 }

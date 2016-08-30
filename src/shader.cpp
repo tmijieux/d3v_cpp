@@ -90,6 +90,8 @@ ShaderProgram::ShaderProgram(Shader *shader, ...)
         m_model_location =      glGetUniformLocation(m_ID, "model");
         m_view_location =       glGetUniformLocation(m_ID, "view");
         m_projection_location = glGetUniformLocation(m_ID, "projection");
+        m_sampler_location =    glGetUniformLocation(m_ID, "tex");
+
         m_position_location =   glGetAttribLocation(m_ID, "position");
         m_tex_coord_location =  glGetAttribLocation(m_ID, "TexCoord");
         glUseProgram(m_ID);
@@ -136,4 +138,9 @@ GLuint ShaderProgram::GetTexCoordLocation() const
 GLuint ShaderProgram::GetNormalLocation() const
 {
     return m_tex_coord_location;
+}
+
+GLuint ShaderProgram::GetSamplerLocation() const
+{
+    return m_sampler_location;
 }

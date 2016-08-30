@@ -2,8 +2,8 @@ models
 textures
 d3v
 *.o
-resources.c
-resources.h
+resources.cpp
+resources.hp
 
 Makefile
 Makefile.in

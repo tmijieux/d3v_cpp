@@ -20,7 +20,7 @@ private:
     mat4 m_view;
     mat4 m_projection;
     void ComputeView();
-    
+
 public:
     Camera();
     Camera(vec3 const &pos, float distance, float angleR, float angleY);
@@ -35,6 +35,9 @@ public:
 
     void Update();
     void Update(ShaderProgram const &);
+
+    mat4 const& GetProjection() const;
+    mat4 const& GetView() const;
 };
 
 }; // end namespace d3v

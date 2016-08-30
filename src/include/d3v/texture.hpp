@@ -9,7 +9,7 @@
 #include <vector>
 #include <string>
 
-
+#include "d3v/shader.hpp"
 
 namespace d3v {
 
@@ -21,7 +21,7 @@ private:
     void LoadJpeg(std::string const &file_path, int &width, int &height);
     
 public:
-    Texture(std::string const &);
+    Texture(std::string const&, ShaderProgram const&);
     ~Texture();
     GLuint GetID();
 };

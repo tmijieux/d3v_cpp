@@ -51,32 +51,17 @@ void Object::Translate(vec3 const &pos)
     ComputeModel();
 }
 
-static void mat4_print(mat4 const &m)
-{
-    for (unsigned row = 0; row < 4; ++row) {
-        for (unsigned col = 0; col < 4; ++col)
-            printf("%f ", m[col][row]);
-        printf("\n");
-    }
-}
-
 void Object::ComputeModel()
 {
     m_modelMat = m_translate * m_rotate * m_scale;
     m_updated = true;
-    printf("model: \n");
-    mat4_print(m_modelMat);
 }
 
 void Object::Draw()
 {
     if (m_hidden)
 	return;
-    //glShadeModel(m_shademodel);
 
-    // if (m_textured)
-    //     glBindTexture(GL_TEXTURE_2D, m_textureID);
-    
     GLint m = m_program->GetModelLocation();
     glUniformMatrix4fv(m, 1, GL_FALSE, &(m_modelMat[0][0]));
     m_model->Draw(*m_program);

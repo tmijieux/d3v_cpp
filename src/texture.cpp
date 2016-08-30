@@ -49,9 +49,10 @@ void Texture::LoadJpeg(std::string const &file_path, int &width, int &height)
     fclose(f);
 }
 
-Texture::Texture(std::string const &path)
+Texture::Texture(std::string const &path, ShaderProgram const &program)
 {
     glGenTextures(1, &m_texID);
+    glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, m_texID);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -61,6 +62,8 @@ Texture::Texture(std::string const &path)
     LoadJpeg(path, width, height);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height,
 		 0, GL_RGB, GL_UNSIGNED_BYTE, &m_textureData[0]);
+    int s = program.GetSamplerLocation();
+    glUniform1i(s, GL_TEXTURE0);
 }
 
 GLuint Texture::GetID()

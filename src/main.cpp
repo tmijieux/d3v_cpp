@@ -77,7 +77,10 @@ mouse_cb(int button, int state, int x, int y)
 	case GLUT_DOWN: gl_scene->m_button = 1; break;
 	case GLUT_UP:
 	    gl_scene->m_button = 0;
-	    vec3 pos;  MouseProjection(pos, x , y);
+	    vec3 pos;
+            MouseProjection(pos, x , y,
+                            gl_scene->m_camera.GetView(),
+                            gl_scene->m_camera.GetProjection());
 	    printf("%f %f %f\n", pos.x, pos.y, pos.z);
 	    break;
 	} break;
@@ -122,10 +125,10 @@ d3v_glut_init(const char *title, int *argc, char **argv[])
     glutInitWindowPosition(WINDOW_X, WINDOW_Y);
     glutInitWindowSize(WIDTH, HEIGHT);
     glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
-    
+
     glutInitContextVersion(3, 3);
     glutInitContextFlags(GLUT_CORE_PROFILE | GLUT_DEBUG);
-    
+
     window_key = glutCreateWindow(title);
 
     glutDisplayFunc(&draw_cb);
@@ -139,7 +142,7 @@ d3v_opengl_init(void)
 {
     glClearColor(.5, .5, .5, 1.0);
     glColor3f(1.0, 1.0, 1.0);
-    
+
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_NORMALIZE);
 }
@@ -168,19 +171,19 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
     }
     d3v_init(&argc, &argv, _("penguins"));
-    
-    Scene mainScene;    
+
+    Scene mainScene;
     Model *penguinModel;
     Texture *penguinTexture;
     Shader *vertexShader, *fragmentShader;
     ShaderProgram *program;
-    
+
     vertexShader = Shader::VertexFromResource("/org/d3v/vertex.glsl");
     fragmentShader = Shader::FragmentFromResource("/org/d3v/fragment.glsl");
     program = new ShaderProgram(vertexShader, fragmentShader, NULL);
     penguinModel = new Model(OBJDIR "penguin.obj", _("penguin"), *program);
-    penguinTexture = new Texture(TEXDIR "penguin_black.jpg");
-    
+    penguinTexture = new Texture(TEXDIR "penguin_black.jpg", *program);
+
     int n = atoi(argv[1]);
     vec3 pos = { 0., 0., 0. };
     for (int i = 0; i < n; ++i)
@@ -189,7 +192,7 @@ int main(int argc, char *argv[])
         pos.x = 0.3 * i;
         penguin = new Object(penguinModel, penguinTexture, pos, 90., 0.1);
         penguin->SetShaderProgram(program);
-        
+
         penguin->SetShadeModel((i % 2) ? GL_FLAT : GL_SMOOTH);
         mainScene.AddObject(penguin);
     }
